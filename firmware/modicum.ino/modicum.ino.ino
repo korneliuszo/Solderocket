@@ -1,6 +1,6 @@
-int buttonPin = 2;
+int buttonPin = 15;
 int potPin = 0;
-int mosfetPin = 5;
+int mosfetPin = 16;
 int potVal = 0;
 
 const int numReadings = 10;
@@ -9,14 +9,13 @@ int readIndex = 0;              // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
 
-bool state = false;
+int buttonState = 1;         // current state of the button, HIGH as we have active low with INPUT_PULLUP
+int lastButtonState = 1;     // previous state of the button
 
 const int ledCount = 10;    // the number of LEDs in the bar graph
 int ledPins[] = {
   2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 };   
-
-
 
 void setup() {
   
@@ -29,69 +28,50 @@ void setup() {
   pinMode(buttonPin, INPUT);    
   pinMode(potPin, INPUT);  
 
-
-  attachInterrupt(digitalPinToInterrupt(buttonPin), fire, RISING);
-
-  // initialize serial communication with computer:
-  Serial.begin(9600);
-  // initialize all the readings to 0:
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) {
-    readings[thisReading] = 0;
-  }
+  pinMode(2, OUTPUT); // Do not know why it did not set in the above for loop
 
 }
 
 void loop() {
 
-  total = total - readings[readIndex];
-  // read from the sensor:
-  readings[readIndex] = analogRead(potPin);
-  // add the reading to the total:
-  total = total + readings[readIndex];
-  // advance to the next position in the array:
-  readIndex = readIndex + 1;
+  buttonState = digitalRead(buttonPin);
+    // compare the buttonState to its previous state
+    if (buttonState != lastButtonState) {
+  
+      if (buttonState == LOW) {  
+        // wend from off to on:
+          digitalWrite(mosfetPin, LOW);
+       
+      } else {
+        // if the current state is LOW then the button
+        // wend from on to off:
 
-  // if we're at the end of the array...
-  if (readIndex >= numReadings) {
-    // ...wrap around to the beginning:
-    readIndex = 0;
-  }
+        digitalWrite(mosfetPin, HIGH); // sets the digital pin 13 on
+        delay(average);            // waits for a second
+        // if in full throtle do not make it of
+        if (average < 999) {
+          digitalWrite(mosfetPin, LOW);
+        }
+          
+       
+      }
+      // Delay a little bit to avoid bouncing
+      delay(50);
+    }
+    // save the current state as the last state,
+    //for next time through the loop
+    lastButtonState = buttonState;
 
-  // calculate the average:
-  average = total / numReadings;
-  // send it to the computer as ASCII digits
-
-  average = map(average, 0, 1023, 50, 1000);
-
+  average = readPot();
 
   showLeds(average,50,1000);
  
- 
-  delay(1);        // delay in between reads for stability
-
- Serial.println(average);
-
- if (state) {
-    digitalWrite(mosfetPin, HIGH); // sets the digital pin 13 on
-    delay(average);            // waits for a second
-    digitalWrite(mosfetPin, LOW);
-    state=false;
- }
-
 }
 
-void fire() {
-
-  static unsigned long last_interrupt_time = 0;
-  unsigned long interrupt_time = millis();
-  // If interrupts come faster than 200ms, assume it's a bounce and ignore
-  if (interrupt_time - last_interrupt_time > 200)
-  {
-    state = true;
-  }
-  last_interrupt_time = interrupt_time;
- 
- 
+int readPot() {
+  
+  return map(analogRead(potPin), 0, 1023, 50, 1000);
+  
 }
 
 void showLeds(int avarage,int mymin,int mymax){
