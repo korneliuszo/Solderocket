@@ -10,10 +10,10 @@ Using the rotary knobs, the time and pressure can be set so that the right dot s
 This device is indispensable when working with SMD on a regular basis. SMD paste can be dosed very accurately and quickly. Adhesives can be used in addition to SMD paste.
 
 # Specifications
-No Compressor needed. Works with Co2 cartridges.
-Adjustable pressure 0-60 psi 
-Adjustable timing from 50 millisecond up to trigger release.
-Ergonomic Injector hand tool
-Dimensions : 155 x 120 x 75 mm
-Weight : 770 gr  (without packaging)
-Works with 12V DC adapter
+* No Compressor needed. Works with Co2 cartridges.
+* Adjustable pressure 0-60 psi 
+* Adjustable timing from 50 millisecond up to trigger release.
+* Ergonomic Injector hand tool
+* Dimensions : 155 x 120 x 75 mm
+* Weight : 770 gr  (without packaging)
+* Works with 12V DC adapter
