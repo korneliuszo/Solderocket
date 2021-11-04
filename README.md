@@ -1,4 +1,4 @@
-![]("solderrocket.jpg")
+![Solderocket]("solderrocket.jpg")
 
 # Solderocket
 Regular solder paste dispensers must be connected to compressed air which you can provide with huge compressor. As a maker I can not run a large compressor in my room because of its noise and footprint.
