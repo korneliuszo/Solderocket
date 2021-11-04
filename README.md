@@ -1,4 +1,4 @@
-# modicum
+# Solderocket
 Regular solder paste dispensers must be connected to compressed air which you can provide with huge compressor. As a maker I can not run a large compressor in my room because of its noise and footprint.
 
 Stencils might be a solution but for small size PCB work they are too dirty and I don't like to touch the chemical solder paste with my hands and tools. It takes more time to clean up every time than apply it to the PCB.
