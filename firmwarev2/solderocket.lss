@@ -3,29 +3,29 @@ solderocket.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000032  00800100  00000184  000001f8  2**0
+  0 .data         00000032  00800100  0000018a  000001fe  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000184  00000000  00000000  00000074  2**1
+  1 .text         0000018a  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000012  00000000  00000000  0000022a  2**0
+  2 .comment      00000012  00000000  00000000  00000230  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000023c  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000244  2**2
                   CONTENTS, READONLY, OCTETS
-  4 .debug_aranges 00000028  00000000  00000000  00000278  2**0
+  4 .debug_aranges 00000028  00000000  00000000  00000280  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  5 .debug_info   000008fd  00000000  00000000  000002a0  2**0
+  5 .debug_info   000008fd  00000000  00000000  000002a8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  6 .debug_abbrev 00000795  00000000  00000000  00000b9d  2**0
+  6 .debug_abbrev 00000795  00000000  00000000  00000ba5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  7 .debug_line   000003ef  00000000  00000000  00001332  2**0
+  7 .debug_line   00000401  00000000  00000000  0000133a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  8 .debug_frame  00000034  00000000  00000000  00001724  2**2
+  8 .debug_frame  00000034  00000000  00000000  0000173c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  9 .debug_str    0000043d  00000000  00000000  00001758  2**0
+  9 .debug_str    0000043d  00000000  00000000  00001770  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 10 .debug_loc    00000160  00000000  00000000  00001b95  2**0
+ 10 .debug_loc    00000160  00000000  00000000  00001bad  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 11 .debug_ranges 00000078  00000000  00000000  00001cf5  2**0
+ 11 .debug_ranges 00000078  00000000  00000000  00001d0d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -96,7 +96,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e4 e8       	ldi	r30, 0x84	; 132
+  7a:	ea e8       	ldi	r30, 0x8A	; 138
   7c:	f1 e0       	ldi	r31, 0x01	; 1
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -105,7 +105,7 @@ Disassembly of section .text:
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
   8a:	17 d0       	rcall	.+46     	; 0xba <main>
-  8c:	79 c0       	rjmp	.+242    	; 0x180 <_exit>
+  8c:	7c c0       	rjmp	.+248    	; 0x186 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	b8 cf       	rjmp	.-144    	; 0x0 <__vectors>
@@ -165,141 +165,144 @@ int main(void)
   d6:	84 b9       	out	0x04, r24	; 4
 	PORTB=0x00;
   d8:	15 b8       	out	0x05, r1	; 5
+	DIDR0=0x01;
+  da:	81 e0       	ldi	r24, 0x01	; 1
+  dc:	80 93 7e 00 	sts	0x007E, r24	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
 	while(1)
 	{
 		uint8_t setting;
 		setting = ReadADC(0)/93; // 11 values 0-10
-  da:	cd e5       	ldi	r28, 0x5D	; 93
-  dc:	d0 e0       	ldi	r29, 0x00	; 0
-  de:	80 e0       	ldi	r24, 0x00	; 0
-  e0:	d7 df       	rcall	.-82     	; 0x90 <ReadADC>
-  e2:	be 01       	movw	r22, r28
-  e4:	39 d0       	rcall	.+114    	; 0x158 <__udivmodhi4>
+  e0:	cd e5       	ldi	r28, 0x5D	; 93
+  e2:	d0 e0       	ldi	r29, 0x00	; 0
+  e4:	80 e0       	ldi	r24, 0x00	; 0
+  e6:	d4 df       	rcall	.-88     	; 0x90 <ReadADC>
+  e8:	be 01       	movw	r22, r28
+  ea:	39 d0       	rcall	.+114    	; 0x15e <__udivmodhi4>
 		if (setting == 11)
-  e6:	6b 30       	cpi	r22, 0x0B	; 11
-  e8:	09 f4       	brne	.+2      	; 0xec <main+0x32>
+  ec:	6b 30       	cpi	r22, 0x0B	; 11
+  ee:	09 f4       	brne	.+2      	; 0xf2 <main+0x38>
 			setting=10;
-  ea:	6a e0       	ldi	r22, 0x0A	; 10
+  f0:	6a e0       	ldi	r22, 0x0A	; 10
 
 		uint8_t lastbutton = 0;
 		uint8_t currbutton;
 		currbutton = PINC&0x02;
 		if (lastbutton != currbutton)
-  ec:	31 9b       	sbis	0x06, 1	; 6
-  ee:	17 c0       	rjmp	.+46     	; 0x11e <main+0x64>
+  f2:	31 9b       	sbis	0x06, 1	; 6
+  f4:	17 c0       	rjmp	.+46     	; 0x124 <main+0x6a>
 		{
 			if (!currbutton)
 				PORTC&=~(1<<2);
 			else
 			{
 				PORTC|=(1<<2);
-  f0:	42 9a       	sbi	0x08, 2	; 8
+  f6:	42 9a       	sbi	0x08, 2	; 8
 				if(setting < 10)
-  f2:	6a 30       	cpi	r22, 0x0A	; 10
-  f4:	58 f4       	brcc	.+22     	; 0x10c <main+0x52>
+  f8:	6a 30       	cpi	r22, 0x0A	; 10
+  fa:	58 f4       	brcc	.+22     	; 0x112 <main+0x58>
 				{
 					uint16_t delay=delays[setting]; //don't reread
-  f6:	e6 2f       	mov	r30, r22
-  f8:	f0 e0       	ldi	r31, 0x00	; 0
-  fa:	ee 0f       	add	r30, r30
-  fc:	ff 1f       	adc	r31, r31
-  fe:	e0 50       	subi	r30, 0x00	; 0
- 100:	ff 4f       	sbci	r31, 0xFF	; 255
- 102:	80 81       	ld	r24, Z
- 104:	91 81       	ldd	r25, Z+1	; 0x01
+  fc:	e6 2f       	mov	r30, r22
+  fe:	f0 e0       	ldi	r31, 0x00	; 0
+ 100:	ee 0f       	add	r30, r30
+ 102:	ff 1f       	adc	r31, r31
+ 104:	e0 50       	subi	r30, 0x00	; 0
+ 106:	ff 4f       	sbci	r31, 0xFF	; 255
+ 108:	80 81       	ld	r24, Z
+ 10a:	91 81       	ldd	r25, Z+1	; 0x01
 					for(uint16_t count=delay;count;count--)
- 106:	00 97       	sbiw	r24, 0x00	; 0
- 108:	e1 f4       	brne	.+56     	; 0x142 <main+0x88>
+ 10c:	00 97       	sbiw	r24, 0x00	; 0
+ 10e:	e1 f4       	brne	.+56     	; 0x148 <main+0x8e>
 						_delay_ms(1); // needs compile time value
 					PORTC&=~(1<<2);
- 10a:	42 98       	cbi	0x08, 2	; 8
+ 110:	42 98       	cbi	0x08, 2	; 8
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 10c:	ff ef       	ldi	r31, 0xFF	; 255
- 10e:	20 e7       	ldi	r18, 0x70	; 112
- 110:	82 e0       	ldi	r24, 0x02	; 2
- 112:	f1 50       	subi	r31, 0x01	; 1
- 114:	20 40       	sbci	r18, 0x00	; 0
- 116:	80 40       	sbci	r24, 0x00	; 0
- 118:	e1 f7       	brne	.-8      	; 0x112 <main+0x58>
- 11a:	00 c0       	rjmp	.+0      	; 0x11c <main+0x62>
- 11c:	00 00       	nop
- 11e:	e4 e1       	ldi	r30, 0x14	; 20
- 120:	f1 e0       	ldi	r31, 0x01	; 1
+ 112:	ff ef       	ldi	r31, 0xFF	; 255
+ 114:	20 e7       	ldi	r18, 0x70	; 112
+ 116:	82 e0       	ldi	r24, 0x02	; 2
+ 118:	f1 50       	subi	r31, 0x01	; 1
+ 11a:	20 40       	sbci	r18, 0x00	; 0
+ 11c:	80 40       	sbci	r24, 0x00	; 0
+ 11e:	e1 f7       	brne	.-8      	; 0x118 <main+0x5e>
+ 120:	00 c0       	rjmp	.+0      	; 0x122 <main+0x68>
+ 122:	00 00       	nop
+ 124:	e4 e1       	ldi	r30, 0x14	; 20
+ 126:	f1 e0       	ldi	r31, 0x01	; 1
 			setting=10;
- 122:	90 e0       	ldi	r25, 0x00	; 0
+ 128:	90 e0       	ldi	r25, 0x00	; 0
 		
 		for(uint8_t led=0;led<10;led++)
 			if((setting == 10) ? 1 : (setting == led))
 				*LEDS[led].port|=LEDS[led].mask;
 			else
 				*LEDS[led].port&=~LEDS[led].mask;
- 124:	a0 81       	ld	r26, Z
- 126:	b1 81       	ldd	r27, Z+1	; 0x01
- 128:	82 81       	ldd	r24, Z+2	; 0x02
+ 12a:	a0 81       	ld	r26, Z
+ 12c:	b1 81       	ldd	r27, Z+1	; 0x01
+ 12e:	82 81       	ldd	r24, Z+2	; 0x02
 				*LEDS[led].port|=LEDS[led].mask;
- 12a:	2c 91       	ld	r18, X
+ 130:	2c 91       	ld	r18, X
 			if((setting == 10) ? 1 : (setting == led))
- 12c:	6a 30       	cpi	r22, 0x0A	; 10
- 12e:	11 f0       	breq	.+4      	; 0x134 <main+0x7a>
- 130:	69 13       	cpse	r22, r25
- 132:	0f c0       	rjmp	.+30     	; 0x152 <main+0x98>
+ 132:	6a 30       	cpi	r22, 0x0A	; 10
+ 134:	11 f0       	breq	.+4      	; 0x13a <main+0x80>
+ 136:	69 13       	cpse	r22, r25
+ 138:	0f c0       	rjmp	.+30     	; 0x158 <main+0x9e>
 				*LEDS[led].port|=LEDS[led].mask;
- 134:	82 2b       	or	r24, r18
+ 13a:	82 2b       	or	r24, r18
 				*LEDS[led].port&=~LEDS[led].mask;
- 136:	8c 93       	st	X, r24
+ 13c:	8c 93       	st	X, r24
 		for(uint8_t led=0;led<10;led++)
- 138:	9f 5f       	subi	r25, 0xFF	; 255
- 13a:	33 96       	adiw	r30, 0x03	; 3
- 13c:	9a 30       	cpi	r25, 0x0A	; 10
- 13e:	91 f7       	brne	.-28     	; 0x124 <main+0x6a>
- 140:	ce cf       	rjmp	.-100    	; 0xde <main+0x24>
- 142:	ef e9       	ldi	r30, 0x9F	; 159
- 144:	ff e0       	ldi	r31, 0x0F	; 15
- 146:	31 97       	sbiw	r30, 0x01	; 1
- 148:	f1 f7       	brne	.-4      	; 0x146 <main+0x8c>
- 14a:	00 c0       	rjmp	.+0      	; 0x14c <main+0x92>
- 14c:	00 00       	nop
+ 13e:	9f 5f       	subi	r25, 0xFF	; 255
+ 140:	33 96       	adiw	r30, 0x03	; 3
+ 142:	9a 30       	cpi	r25, 0x0A	; 10
+ 144:	91 f7       	brne	.-28     	; 0x12a <main+0x70>
+ 146:	ce cf       	rjmp	.-100    	; 0xe4 <main+0x2a>
+ 148:	ef e9       	ldi	r30, 0x9F	; 159
+ 14a:	ff e0       	ldi	r31, 0x0F	; 15
+ 14c:	31 97       	sbiw	r30, 0x01	; 1
+ 14e:	f1 f7       	brne	.-4      	; 0x14c <main+0x92>
+ 150:	00 c0       	rjmp	.+0      	; 0x152 <main+0x98>
+ 152:	00 00       	nop
 					for(uint16_t count=delay;count;count--)
- 14e:	01 97       	sbiw	r24, 0x01	; 1
- 150:	da cf       	rjmp	.-76     	; 0x106 <main+0x4c>
+ 154:	01 97       	sbiw	r24, 0x01	; 1
+ 156:	da cf       	rjmp	.-76     	; 0x10c <main+0x52>
 				*LEDS[led].port&=~LEDS[led].mask;
- 152:	80 95       	com	r24
- 154:	82 23       	and	r24, r18
- 156:	ef cf       	rjmp	.-34     	; 0x136 <main+0x7c>
+ 158:	80 95       	com	r24
+ 15a:	82 23       	and	r24, r18
+ 15c:	ef cf       	rjmp	.-34     	; 0x13c <main+0x82>
 
-00000158 <__udivmodhi4>:
- 158:	aa 1b       	sub	r26, r26
- 15a:	bb 1b       	sub	r27, r27
- 15c:	51 e1       	ldi	r21, 0x11	; 17
- 15e:	07 c0       	rjmp	.+14     	; 0x16e <__udivmodhi4_ep>
+0000015e <__udivmodhi4>:
+ 15e:	aa 1b       	sub	r26, r26
+ 160:	bb 1b       	sub	r27, r27
+ 162:	51 e1       	ldi	r21, 0x11	; 17
+ 164:	07 c0       	rjmp	.+14     	; 0x174 <__udivmodhi4_ep>
 
-00000160 <__udivmodhi4_loop>:
- 160:	aa 1f       	adc	r26, r26
- 162:	bb 1f       	adc	r27, r27
- 164:	a6 17       	cp	r26, r22
- 166:	b7 07       	cpc	r27, r23
- 168:	10 f0       	brcs	.+4      	; 0x16e <__udivmodhi4_ep>
- 16a:	a6 1b       	sub	r26, r22
- 16c:	b7 0b       	sbc	r27, r23
+00000166 <__udivmodhi4_loop>:
+ 166:	aa 1f       	adc	r26, r26
+ 168:	bb 1f       	adc	r27, r27
+ 16a:	a6 17       	cp	r26, r22
+ 16c:	b7 07       	cpc	r27, r23
+ 16e:	10 f0       	brcs	.+4      	; 0x174 <__udivmodhi4_ep>
+ 170:	a6 1b       	sub	r26, r22
+ 172:	b7 0b       	sbc	r27, r23
 
-0000016e <__udivmodhi4_ep>:
- 16e:	88 1f       	adc	r24, r24
- 170:	99 1f       	adc	r25, r25
- 172:	5a 95       	dec	r21
- 174:	a9 f7       	brne	.-22     	; 0x160 <__udivmodhi4_loop>
- 176:	80 95       	com	r24
- 178:	90 95       	com	r25
- 17a:	bc 01       	movw	r22, r24
- 17c:	cd 01       	movw	r24, r26
- 17e:	08 95       	ret
+00000174 <__udivmodhi4_ep>:
+ 174:	88 1f       	adc	r24, r24
+ 176:	99 1f       	adc	r25, r25
+ 178:	5a 95       	dec	r21
+ 17a:	a9 f7       	brne	.-22     	; 0x166 <__udivmodhi4_loop>
+ 17c:	80 95       	com	r24
+ 17e:	90 95       	com	r25
+ 180:	bc 01       	movw	r22, r24
+ 182:	cd 01       	movw	r24, r26
+ 184:	08 95       	ret
 
-00000180 <_exit>:
- 180:	f8 94       	cli
+00000186 <_exit>:
+ 186:	f8 94       	cli
 
-00000182 <__stop_program>:
- 182:	ff cf       	rjmp	.-2      	; 0x182 <__stop_program>
+00000188 <__stop_program>:
+ 188:	ff cf       	rjmp	.-2      	; 0x188 <__stop_program>

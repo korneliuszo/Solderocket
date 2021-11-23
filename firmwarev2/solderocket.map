@@ -182,7 +182,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x184
+.text           0x0000000000000000      0x18a
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/11.2.0/../../../../avr/lib/avr5/crtatmega328.o
                 0x0000000000000000                __vectors
@@ -268,16 +268,16 @@ END GROUP
  .text.ReadADC  0x0000000000000090       0x2a obj/solderocket.o
                 0x0000000000000090                ReadADC
  .text.startup.main
-                0x00000000000000ba       0x9e obj/solderocket.o
+                0x00000000000000ba       0xa4 obj/solderocket.o
                 0x00000000000000ba                main
  .text.libgcc.div
-                0x0000000000000158       0x28 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_udivmodhi4.o)
-                0x0000000000000158                __udivmodhi4
-                0x0000000000000180                . = ALIGN (0x2)
+                0x000000000000015e       0x28 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x000000000000015e                __udivmodhi4
+                0x0000000000000186                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000000180        0x0 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_exit.o)
-                0x0000000000000180                exit
-                0x0000000000000180                _exit
+ .fini9         0x0000000000000186        0x0 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_exit.o)
+                0x0000000000000186                exit
+                0x0000000000000186                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -296,17 +296,17 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000000180        0x4 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_exit.o)
+ .fini0         0x0000000000000186        0x4 /usr/lib/gcc/avr/11.2.0/avr5/libgcc.a(_exit.o)
  *(.fini0)
  *(.hightext)
  *(.hightext*)
  *(.progmemx.*)
-                0x0000000000000184                . = ALIGN (0x2)
+                0x000000000000018a                . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
-                0x0000000000000184                _etext = .
+                0x000000000000018a                _etext = .
 
-.data           0x0000000000800100       0x32 load address 0x0000000000000184
+.data           0x0000000000800100       0x32 load address 0x000000000000018a
                 0x0000000000800100                PROVIDE (__data_start = .)
  *(.data)
  .data          0x0000000000800100       0x32 obj/solderocket.o
@@ -327,8 +327,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 [!provide]                        PROVIDE (__bss_end = .)
-                0x0000000000000184                __data_load_start = LOADADDR (.data)
-                0x00000000000001b6                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000000000000018a                __data_load_start = LOADADDR (.data)
+                0x00000000000001bc                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0000000000800132        0x0
                 [!provide]                        PROVIDE (__noinit_start = .)
@@ -414,10 +414,10 @@ END GROUP
  .debug_abbrev  0x0000000000000000      0x5a2 /usr/lib/gcc/avr/11.2.0/../../../../avr/lib/avr5/crtatmega328.o
  .debug_abbrev  0x00000000000005a2      0x1f3 obj/solderocket.o
 
-.debug_line     0x0000000000000000      0x3ef
+.debug_line     0x0000000000000000      0x401
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000       0x1d /usr/lib/gcc/avr/11.2.0/../../../../avr/lib/avr5/crtatmega328.o
- .debug_line    0x000000000000001d      0x3d2 obj/solderocket.o
+ .debug_line    0x000000000000001d      0x3e4 obj/solderocket.o
 
 .debug_frame    0x0000000000000000       0x34
  *(.debug_frame)
