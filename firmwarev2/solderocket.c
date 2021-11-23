@@ -61,6 +61,7 @@ int main(void)
 	PORTD=0x00;
 	DDRB=0xFF;
 	PORTB=0x00;
+	DIDR0=0x01;
 	while(1)
 	{
 		uint8_t setting;
