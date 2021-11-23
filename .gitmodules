@@ -1,0 +1,3 @@
+[submodule "firmwarev2/dmbs"]
+	path = firmwarev2/dmbs
+	url = https://github.com/abcminiuser/dmbs
