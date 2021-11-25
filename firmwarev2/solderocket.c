@@ -62,6 +62,7 @@ int main(void)
 	DDRB=0xFF;
 	PORTB=0x00;
 	DIDR0=0x01;
+	uint8_t lastbutton = 0;	
 	while(1)
 	{
 		uint8_t setting;
@@ -69,7 +70,6 @@ int main(void)
 		if (setting == 11)
 			setting=10;
 
-		uint8_t lastbutton = 0;
 		uint8_t currbutton;
 		currbutton = PINC&0x02;
 		if (lastbutton != currbutton)

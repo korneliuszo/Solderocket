@@ -3,29 +3,29 @@ solderocket.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000032  00800100  0000018a  000001fe  2**0
+  0 .data         00000032  00800100  0000019a  0000020e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000018a  00000000  00000000  00000074  2**1
+  1 .text         0000019a  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000012  00000000  00000000  00000230  2**0
+  2 .comment      00000012  00000000  00000000  00000240  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000244  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000254  2**2
                   CONTENTS, READONLY, OCTETS
-  4 .debug_aranges 00000028  00000000  00000000  00000280  2**0
+  4 .debug_aranges 00000028  00000000  00000000  00000290  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  5 .debug_info   000008fd  00000000  00000000  000002a8  2**0
+  5 .debug_info   00000909  00000000  00000000  000002b8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  6 .debug_abbrev 00000795  00000000  00000000  00000ba5  2**0
+  6 .debug_abbrev 00000797  00000000  00000000  00000bc1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  7 .debug_line   00000401  00000000  00000000  0000133a  2**0
+  7 .debug_line   00000443  00000000  00000000  00001358  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  8 .debug_frame  00000034  00000000  00000000  0000173c  2**2
+  8 .debug_frame  00000034  00000000  00000000  0000179c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  9 .debug_str    0000043d  00000000  00000000  00001770  2**0
+  9 .debug_str    0000043d  00000000  00000000  000017d0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 10 .debug_loc    00000160  00000000  00000000  00001bad  2**0
+ 10 .debug_loc    00000197  00000000  00000000  00001c0d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 11 .debug_ranges 00000078  00000000  00000000  00001d0d  2**0
+ 11 .debug_ranges 00000060  00000000  00000000  00001da4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -96,7 +96,7 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	ea e8       	ldi	r30, 0x8A	; 138
+  7a:	ea e9       	ldi	r30, 0x9A	; 154
   7c:	f1 e0       	ldi	r31, 0x01	; 1
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
@@ -105,7 +105,7 @@ Disassembly of section .text:
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
   8a:	17 d0       	rcall	.+46     	; 0xba <main>
-  8c:	7c c0       	rjmp	.+248    	; 0x186 <_exit>
+  8c:	84 c0       	rjmp	.+264    	; 0x196 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	b8 cf       	rjmp	.-144    	; 0x0 <__vectors>
@@ -168,141 +168,152 @@ int main(void)
 	DIDR0=0x01;
   da:	81 e0       	ldi	r24, 0x01	; 1
   dc:	80 93 7e 00 	sts	0x007E, r24	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
+	uint8_t lastbutton = 0;	
+  e0:	10 e0       	ldi	r17, 0x00	; 0
 	while(1)
 	{
 		uint8_t setting;
 		setting = ReadADC(0)/93; // 11 values 0-10
-  e0:	cd e5       	ldi	r28, 0x5D	; 93
-  e2:	d0 e0       	ldi	r29, 0x00	; 0
-  e4:	80 e0       	ldi	r24, 0x00	; 0
-  e6:	d4 df       	rcall	.-88     	; 0x90 <ReadADC>
-  e8:	be 01       	movw	r22, r28
-  ea:	39 d0       	rcall	.+114    	; 0x15e <__udivmodhi4>
+  e2:	cd e5       	ldi	r28, 0x5D	; 93
+  e4:	d0 e0       	ldi	r29, 0x00	; 0
+  e6:	80 e0       	ldi	r24, 0x00	; 0
+  e8:	d3 df       	rcall	.-90     	; 0x90 <ReadADC>
+  ea:	be 01       	movw	r22, r28
+  ec:	40 d0       	rcall	.+128    	; 0x16e <__udivmodhi4>
 		if (setting == 11)
-  ec:	6b 30       	cpi	r22, 0x0B	; 11
-  ee:	09 f4       	brne	.+2      	; 0xf2 <main+0x38>
+  ee:	6b 30       	cpi	r22, 0x0B	; 11
+  f0:	09 f4       	brne	.+2      	; 0xf4 <main+0x3a>
 			setting=10;
-  f0:	6a e0       	ldi	r22, 0x0A	; 10
+  f2:	6a e0       	ldi	r22, 0x0A	; 10
 
-		uint8_t lastbutton = 0;
 		uint8_t currbutton;
 		currbutton = PINC&0x02;
+  f4:	96 b1       	in	r25, 0x06	; 6
+  f6:	92 70       	andi	r25, 0x02	; 2
 		if (lastbutton != currbutton)
-  f2:	31 9b       	sbis	0x06, 1	; 6
-  f4:	17 c0       	rjmp	.+46     	; 0x124 <main+0x6a>
+  f8:	19 17       	cp	r17, r25
+  fa:	61 f0       	breq	.+24     	; 0x114 <main+0x5a>
 		{
 			if (!currbutton)
-				PORTC&=~(1<<2);
-			else
-			{
-				PORTC|=(1<<2);
-  f6:	42 9a       	sbi	0x08, 2	; 8
+  fc:	91 11       	cpse	r25, r1
+  fe:	1d c0       	rjmp	.+58     	; 0x13a <main+0x80>
 				if(setting < 10)
-  f8:	6a 30       	cpi	r22, 0x0A	; 10
-  fa:	58 f4       	brcc	.+22     	; 0x112 <main+0x58>
 				{
 					uint16_t delay=delays[setting]; //don't reread
-  fc:	e6 2f       	mov	r30, r22
-  fe:	f0 e0       	ldi	r31, 0x00	; 0
- 100:	ee 0f       	add	r30, r30
- 102:	ff 1f       	adc	r31, r31
- 104:	e0 50       	subi	r30, 0x00	; 0
- 106:	ff 4f       	sbci	r31, 0xFF	; 255
- 108:	80 81       	ld	r24, Z
- 10a:	91 81       	ldd	r25, Z+1	; 0x01
 					for(uint16_t count=delay;count;count--)
- 10c:	00 97       	sbiw	r24, 0x00	; 0
- 10e:	e1 f4       	brne	.+56     	; 0x148 <main+0x8e>
 						_delay_ms(1); // needs compile time value
 					PORTC&=~(1<<2);
- 110:	42 98       	cbi	0x08, 2	; 8
+ 100:	42 98       	cbi	0x08, 2	; 8
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 112:	ff ef       	ldi	r31, 0xFF	; 255
- 114:	20 e7       	ldi	r18, 0x70	; 112
- 116:	82 e0       	ldi	r24, 0x02	; 2
- 118:	f1 50       	subi	r31, 0x01	; 1
- 11a:	20 40       	sbci	r18, 0x00	; 0
- 11c:	80 40       	sbci	r24, 0x00	; 0
- 11e:	e1 f7       	brne	.-8      	; 0x118 <main+0x5e>
- 120:	00 c0       	rjmp	.+0      	; 0x122 <main+0x68>
- 122:	00 00       	nop
- 124:	e4 e1       	ldi	r30, 0x14	; 20
- 126:	f1 e0       	ldi	r31, 0x01	; 1
-			setting=10;
- 128:	90 e0       	ldi	r25, 0x00	; 0
+ 102:	ff ef       	ldi	r31, 0xFF	; 255
+ 104:	20 e7       	ldi	r18, 0x70	; 112
+ 106:	32 e0       	ldi	r19, 0x02	; 2
+ 108:	f1 50       	subi	r31, 0x01	; 1
+ 10a:	20 40       	sbci	r18, 0x00	; 0
+ 10c:	30 40       	sbci	r19, 0x00	; 0
+ 10e:	e1 f7       	brne	.-8      	; 0x108 <main+0x4e>
+ 110:	00 c0       	rjmp	.+0      	; 0x112 <main+0x58>
+ 112:	00 00       	nop
+			};
+			lastbutton = currbutton;
+			_delay_ms(50);
+		};
 		
 		for(uint8_t led=0;led<10;led++)
+ 114:	e4 e1       	ldi	r30, 0x14	; 20
+ 116:	f1 e0       	ldi	r31, 0x01	; 1
+ 118:	20 e0       	ldi	r18, 0x00	; 0
 			if((setting == 10) ? 1 : (setting == led))
 				*LEDS[led].port|=LEDS[led].mask;
 			else
 				*LEDS[led].port&=~LEDS[led].mask;
- 12a:	a0 81       	ld	r26, Z
- 12c:	b1 81       	ldd	r27, Z+1	; 0x01
- 12e:	82 81       	ldd	r24, Z+2	; 0x02
+ 11a:	a0 81       	ld	r26, Z
+ 11c:	b1 81       	ldd	r27, Z+1	; 0x01
+ 11e:	82 81       	ldd	r24, Z+2	; 0x02
 				*LEDS[led].port|=LEDS[led].mask;
- 130:	2c 91       	ld	r18, X
+ 120:	3c 91       	ld	r19, X
 			if((setting == 10) ? 1 : (setting == led))
- 132:	6a 30       	cpi	r22, 0x0A	; 10
- 134:	11 f0       	breq	.+4      	; 0x13a <main+0x80>
- 136:	69 13       	cpse	r22, r25
- 138:	0f c0       	rjmp	.+30     	; 0x158 <main+0x9e>
+ 122:	6a 30       	cpi	r22, 0x0A	; 10
+ 124:	11 f0       	breq	.+4      	; 0x12a <main+0x70>
+ 126:	62 13       	cpse	r22, r18
+ 128:	1f c0       	rjmp	.+62     	; 0x168 <main+0xae>
 				*LEDS[led].port|=LEDS[led].mask;
- 13a:	82 2b       	or	r24, r18
+ 12a:	83 2b       	or	r24, r19
 				*LEDS[led].port&=~LEDS[led].mask;
- 13c:	8c 93       	st	X, r24
+ 12c:	8c 93       	st	X, r24
 		for(uint8_t led=0;led<10;led++)
- 13e:	9f 5f       	subi	r25, 0xFF	; 255
- 140:	33 96       	adiw	r30, 0x03	; 3
- 142:	9a 30       	cpi	r25, 0x0A	; 10
- 144:	91 f7       	brne	.-28     	; 0x12a <main+0x70>
- 146:	ce cf       	rjmp	.-100    	; 0xe4 <main+0x2a>
- 148:	ef e9       	ldi	r30, 0x9F	; 159
- 14a:	ff e0       	ldi	r31, 0x0F	; 15
- 14c:	31 97       	sbiw	r30, 0x01	; 1
- 14e:	f1 f7       	brne	.-4      	; 0x14c <main+0x92>
- 150:	00 c0       	rjmp	.+0      	; 0x152 <main+0x98>
- 152:	00 00       	nop
+ 12e:	2f 5f       	subi	r18, 0xFF	; 255
+ 130:	33 96       	adiw	r30, 0x03	; 3
+ 132:	2a 30       	cpi	r18, 0x0A	; 10
+ 134:	91 f7       	brne	.-28     	; 0x11a <main+0x60>
+		currbutton = PINC&0x02;
+ 136:	19 2f       	mov	r17, r25
+ 138:	d6 cf       	rjmp	.-84     	; 0xe6 <main+0x2c>
+				PORTC|=(1<<2);
+ 13a:	42 9a       	sbi	0x08, 2	; 8
+				if(setting < 10)
+ 13c:	6a 30       	cpi	r22, 0x0A	; 10
+ 13e:	08 f7       	brcc	.-62     	; 0x102 <main+0x48>
+					uint16_t delay=delays[setting]; //don't reread
+ 140:	e6 2f       	mov	r30, r22
+ 142:	f0 e0       	ldi	r31, 0x00	; 0
+ 144:	ee 0f       	add	r30, r30
+ 146:	ff 1f       	adc	r31, r31
+ 148:	e0 50       	subi	r30, 0x00	; 0
+ 14a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 14c:	20 81       	ld	r18, Z
+ 14e:	31 81       	ldd	r19, Z+1	; 0x01
 					for(uint16_t count=delay;count;count--)
- 154:	01 97       	sbiw	r24, 0x01	; 1
- 156:	da cf       	rjmp	.-76     	; 0x10c <main+0x52>
+ 150:	21 15       	cp	r18, r1
+ 152:	31 05       	cpc	r19, r1
+ 154:	a9 f2       	breq	.-86     	; 0x100 <main+0x46>
+ 156:	ef e9       	ldi	r30, 0x9F	; 159
+ 158:	ff e0       	ldi	r31, 0x0F	; 15
+ 15a:	31 97       	sbiw	r30, 0x01	; 1
+ 15c:	f1 f7       	brne	.-4      	; 0x15a <main+0xa0>
+ 15e:	00 c0       	rjmp	.+0      	; 0x160 <main+0xa6>
+ 160:	00 00       	nop
+ 162:	21 50       	subi	r18, 0x01	; 1
+ 164:	31 09       	sbc	r19, r1
+ 166:	f4 cf       	rjmp	.-24     	; 0x150 <main+0x96>
 				*LEDS[led].port&=~LEDS[led].mask;
- 158:	80 95       	com	r24
- 15a:	82 23       	and	r24, r18
- 15c:	ef cf       	rjmp	.-34     	; 0x13c <main+0x82>
+ 168:	80 95       	com	r24
+ 16a:	83 23       	and	r24, r19
+ 16c:	df cf       	rjmp	.-66     	; 0x12c <main+0x72>
 
-0000015e <__udivmodhi4>:
- 15e:	aa 1b       	sub	r26, r26
- 160:	bb 1b       	sub	r27, r27
- 162:	51 e1       	ldi	r21, 0x11	; 17
- 164:	07 c0       	rjmp	.+14     	; 0x174 <__udivmodhi4_ep>
+0000016e <__udivmodhi4>:
+ 16e:	aa 1b       	sub	r26, r26
+ 170:	bb 1b       	sub	r27, r27
+ 172:	51 e1       	ldi	r21, 0x11	; 17
+ 174:	07 c0       	rjmp	.+14     	; 0x184 <__udivmodhi4_ep>
 
-00000166 <__udivmodhi4_loop>:
- 166:	aa 1f       	adc	r26, r26
- 168:	bb 1f       	adc	r27, r27
- 16a:	a6 17       	cp	r26, r22
- 16c:	b7 07       	cpc	r27, r23
- 16e:	10 f0       	brcs	.+4      	; 0x174 <__udivmodhi4_ep>
- 170:	a6 1b       	sub	r26, r22
- 172:	b7 0b       	sbc	r27, r23
+00000176 <__udivmodhi4_loop>:
+ 176:	aa 1f       	adc	r26, r26
+ 178:	bb 1f       	adc	r27, r27
+ 17a:	a6 17       	cp	r26, r22
+ 17c:	b7 07       	cpc	r27, r23
+ 17e:	10 f0       	brcs	.+4      	; 0x184 <__udivmodhi4_ep>
+ 180:	a6 1b       	sub	r26, r22
+ 182:	b7 0b       	sbc	r27, r23
 
-00000174 <__udivmodhi4_ep>:
- 174:	88 1f       	adc	r24, r24
- 176:	99 1f       	adc	r25, r25
- 178:	5a 95       	dec	r21
- 17a:	a9 f7       	brne	.-22     	; 0x166 <__udivmodhi4_loop>
- 17c:	80 95       	com	r24
- 17e:	90 95       	com	r25
- 180:	bc 01       	movw	r22, r24
- 182:	cd 01       	movw	r24, r26
- 184:	08 95       	ret
+00000184 <__udivmodhi4_ep>:
+ 184:	88 1f       	adc	r24, r24
+ 186:	99 1f       	adc	r25, r25
+ 188:	5a 95       	dec	r21
+ 18a:	a9 f7       	brne	.-22     	; 0x176 <__udivmodhi4_loop>
+ 18c:	80 95       	com	r24
+ 18e:	90 95       	com	r25
+ 190:	bc 01       	movw	r22, r24
+ 192:	cd 01       	movw	r24, r26
+ 194:	08 95       	ret
 
-00000186 <_exit>:
- 186:	f8 94       	cli
+00000196 <_exit>:
+ 196:	f8 94       	cli
 
-00000188 <__stop_program>:
- 188:	ff cf       	rjmp	.-2      	; 0x188 <__stop_program>
+00000198 <__stop_program>:
+ 198:	ff cf       	rjmp	.-2      	; 0x198 <__stop_program>
