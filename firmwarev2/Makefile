@@ -1,4 +1,4 @@
-MCU          = atmega328
+MCU          = atmega328p
 ARCH         = AVR8
 F_CPU        = 16000000
 OPTIMIZATION = s
