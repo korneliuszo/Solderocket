@@ -38,19 +38,37 @@ struct {
 	{&PORTB,0x08},
 };
 
-uint16_t delays[]=
+typedef struct {
+	uint16_t delay;
+	uint16_t led;
+} Delays;
+
+//[ round(50*math.exp(x)) for x in [math.log(1000/50)*x/18 for x in range(19)]]
+
+Delays delays[]=
 {
-	50,
-	70,
-	97,
-	135,
-	189,
-	264,
-	368,
-	513,
-	716,
-	1000,
+	{  50, 0b0000000001},
+	{  59, 0b0000000011},
+	{  70, 0b0000000010},
+	{  82, 0b0000000110},
+	{  97, 0b0000000100},
+	{ 115, 0b0000001100},
+	{ 136, 0b0000001000},
+	{ 160, 0b0000011000},
+	{ 189, 0b0000010000},
+	{ 224, 0b0000110000},
+	{ 264, 0b0000100000},
+	{ 312, 0b0001100000},
+	{ 368, 0b0001000000},
+	{ 435, 0b0011000000},
+	{ 514, 0b0010000000},
+	{ 607, 0b0110000000},
+	{ 717, 0b0100000000},
+	{ 847, 0b1100000000},
+	{1000, 0b1000000000},
 };
+
+#define DELAYS_LEN 19
 
 int main(void)
 {
@@ -66,9 +84,9 @@ int main(void)
 	while(1)
 	{
 		uint8_t setting;
-		setting = ReadADC(0)/93; // 11 values 0-10
-		if (setting == 11)
-			setting=10;
+		setting = ReadADC(0)/((uint16_t)(1024.0/(DELAYS_LEN)));
+		if (setting >= (DELAYS_LEN))
+			setting=(DELAYS_LEN);
 
 		uint8_t currbutton;
 		currbutton = PINC&0x02;
@@ -79,9 +97,9 @@ int main(void)
 			else
 			{
 				PORTC|=(1<<2);
-				if(setting < 10)
+				if(setting < DELAYS_LEN)
 				{
-					uint16_t delay=delays[setting]; //don't reread
+					uint16_t delay=delays[setting].delay; //don't reread
 					for(uint16_t count=delay;count;count--)
 						_delay_ms(1); // needs compile time value
 					PORTC&=~(1<<2);
@@ -92,7 +110,7 @@ int main(void)
 		};
 		
 		for(uint8_t led=0;led<10;led++)
-			if((setting == 10) ? 1 : (setting == led))
+			if((setting == (DELAYS_LEN)) ? 1 : (delays[setting].led & (1<<led)))
 				*LEDS[led].port|=LEDS[led].mask;
 			else
 				*LEDS[led].port&=~LEDS[led].mask;
